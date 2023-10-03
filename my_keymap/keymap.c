@@ -19,28 +19,29 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include QMK_KEYBOARD_H
 
 #include "quantum.h"
+#include "a2j/translate_ansi_to_jis.h"
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // keymap for default
   [0] = LAYOUT_universal(
-    KC_ESC   , KC_Q     , KC_W     , KC_E     , KC_R     , KC_T     ,                                        KC_Y     , KC_U     , KC_I     , KC_O     , KC_P     , KC_MINUS ,
-    KC_TAB   , KC_A     , KC_S     , KC_D     , KC_F     , KC_G     ,                                        KC_H     , KC_J     , KC_K     , KC_L     , KC_SCLN  , KC_QUOTE ,
-    KC_LSFT  , KC_Z     , KC_X     , KC_C     , KC_V     , KC_B     ,                                        KC_N     , KC_M     , KC_COMM  , KC_DOT   , KC_SLSH  , KC_INT1  ,
+    KC_TAB    , KC_Q     , KC_W     , KC_E     , KC_R     , KC_T     ,                                        KC_Y     , KC_U     , KC_I     , KC_O     , KC_P     , KC_MINUS ,
+    KC_LSFT   , KC_A     , KC_S     , KC_D     , KC_F     , KC_G     ,                                        KC_H     , KC_J     , KC_K     , KC_L     , KC_SCLN  , KC_QUOTE ,
+    KC_LCTL   , KC_Z     , KC_X     , KC_C     , KC_V     , KC_B     ,                                        KC_N     , KC_M     , KC_COMM  , KC_DOT   , KC_SLSH  , KC_INT1  ,
               KC_LALT,KC_LGUI,LCTL_T(KC_LNG2)     ,LT(1,KC_SPC),LT(3,KC_LNG1),                  KC_BSPC,LT(2,KC_ENT), RCTL_T(KC_LNG2),     KC_RALT  , KC_PSCR
   ),
 
   [1] = LAYOUT_universal(
-    KC_GRV   ,  S(KC_1) , S(KC_2)  , S(KC_3) , S(KC_4)  , S(KC_5)  ,                                         S(KC_6)  , S(KC_7)  , KC_EQL   , KC_TILD  ,KC_GRV  , KC_F11   ,
+    KC_GRV   ,  KC_EXLM	, KC_DQT   , KC_HASH , KC_DLR   , KC_PERC  ,                                         KC_AMPR  , KC_QUOT  , KC_CIRC  , KC_TILD  ,KC_PIPE  , KC_GRV   ,
     _______  ,  KC_1    , KC_2     , KC_3    , KC_4     , KC_5     ,                                         KC_6     , KC_7     , KC_8     , KC_9     , KC_0    , KC_F12   ,
-    _______  ,  _______ , KC_LEFT  , KC_DOWN , KC_RGHT  , KC_BSPC  ,                                         KC_PGDN  , KC_LEFT  , KC_DOWN  , KC_RGHT  , _______  , _______  ,
+    _______  ,  _______ , KC_LEFT  , KC_DOWN , KC_RGHT  , KC_BSPC  ,                                         KC_PGDN  , KC_LEFT  , KC_DOWN  , KC_RGHT  , _______ , _______  ,
                   _______  , _______ , _______  ,         _______  , _______  ,                   _______  , _______  , _______       , _______  , _______
   ),
 
   [2] = LAYOUT_universal(
-    _______  ,S(KC_QUOT), KC_7     , KC_8    , KC_9     , S(KC_8)  ,                                         S(KC_9)  , S(KC_1)  , S(KC_6)  , KC_LBRC  , S(KC_4)  , _______  ,
-    _______  ,S(KC_SCLN), KC_4     , KC_5    , KC_6     , KC_RBRC  ,                                         KC_NUHS  , KC_BSPC  , KC_UP    , KC_DEL   , KC_QUOT  , S(KC_2)  ,
-    _______  ,S(KC_MINS), KC_1     , KC_2    , KC_3     ,S(KC_RBRC),                                        S(KC_NUHS), KC_LEFT  , KC_DOWN  ,KC_RIGHT  ,S(KC_SLSH),S(KC_INT3),
+    _______  ,S(KC_QUOT), KC_7     , KC_8    , KC_9     , KC_LBRC  ,                                         KC_RBRC  , KC_BSPC  , KC_UP      , KC_DEL   , KC_AT    , KC_EQL   ,
+    _______  ,S(KC_SCLN), KC_4     , KC_5    , KC_6     , KC_LPRN  ,                                         KC_RPRN  , KC_LEFT  , KC_DOWN    , KC_RIGHT , KC_PLUS  , KC_ASTR  ,
+    _______  ,S(KC_MINS), KC_1     , KC_2    , KC_3     , KC_LCBR  ,                                         KC_RCBR  , _______  , KC_LABK    , KC_RABK  , KC_QUES  , KC_UNDS  ,
                   KC_0     , KC_DOT  , _______  ,         _______  , _______  ,                   KC_DEL   , _______  , _______       , _______  , _______
   ),
 
@@ -80,4 +81,8 @@ void oledkit_render_info_user(void) {
 
 void pointing_device_init_user(void) {
     set_auto_mouse_enable(true);         // always required before the auto mouse feature will work
+}
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  return process_record_user_a2j(keycode, record);
 }
